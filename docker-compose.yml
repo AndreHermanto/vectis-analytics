@@ -5,7 +5,7 @@ services:
     restart: always
     environment:
       MYSQL_ROOT_PASSWORD: 'password'
-    container_name: mysql
+    container_name: garvan_vectis_analytics_db
     volumes:
       - mydb:/var/lib/mysql
       - ./mysql:/docker-entrypoint-initdb.d
