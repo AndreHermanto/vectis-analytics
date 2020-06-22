@@ -40,10 +40,11 @@ router.post('/search-query', authenticateToken, function(req, res, next) {
     const panel = req.body.panel || "";
     const platform = req.body.platform;
     const cohort = req.body.cohort;
-    var sql = `INSERT INTO SEARCH_QUERIES (timestamp, gene, panel_source, panel, platform, cohort) VALUES ('${timestamp}','${gene}','${panel_source}', '${panel}','${platform}','${cohort}')`;
+    const data_access = req.body.data_access;
+    var sql = `INSERT INTO SEARCH_QUERIES (timestamp, gene, panel_source, panel, platform, cohort, data_access) VALUES ('${timestamp}','${gene}','${panel_source}', '${panel}','${platform}','${cohort}', '${data_access}')`;
 
     con.query(sql, function (err, result) {
-        if (err) throw err;
+	if (err) throw err;
         res.json({success: true});
       });
 })
@@ -55,14 +56,14 @@ router.post('/user-login', authenticateToken, function(req, res, next) {
 
     const platform = req.body.platform;
     var sql = `INSERT INTO USER_LOGIN (timestamp, email, platform) VALUES ('${timestamp}','${email}','${platform}')`;
-
+    
     con.query(sql, function (err, result) {
-        if (err) throw err;
+	if (err) throw err;
         res.json({success: true});
       });
 })
 
-router.options('/', cors());
+/*router.options('/', cors());
 router.post('/', function(req, res, next) {
         const sqlCommand = req.body.sqlCommand;
         con.query(sqlCommand, function (err, result, fields) {
@@ -72,6 +73,6 @@ router.post('/', function(req, res, next) {
             };
             res.send(result);
         });
-});
+});*/
 
 module.exports = router;

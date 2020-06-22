@@ -9,12 +9,11 @@ var indexRouter = require('./routes/index');
 var vectisRouter = require('./routes/vectis-analytics');
 
 var cors = require('cors')
-var whitelist = ['http://localhost:4200','https://sgc.garvan.org.au','https://variantatlas.org.au','https://circa-garvan.web.app/']
+var whitelist = ['http://localhost:4200','https://sgc.garvan.org.au','https://variantatlas.org.au','https://circa-garvan.web.app']
 
 
 var corsOptions = {
   origin: function (origin, callback) {
-    console.log(origin);
     if (typeof origin === 'undefined' || whitelist.indexOf(origin) !== -1) {
       callback(null, true)
     } else {
