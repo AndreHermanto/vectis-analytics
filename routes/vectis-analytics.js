@@ -4,6 +4,7 @@ var con = require('../dbconnection');
 var config = require("../config/keys");
 const jwt = require("jsonwebtoken");
 var cors = require('cors')
+var mysql = require('mysql');
 
 function authenticateToken(req, res, next) {
 	// Gather the jwt access token from the request header
@@ -22,9 +23,9 @@ router.options('/user-query', cors());
 router.post('/user-query', authenticateToken, function(req, res, next) {
     var timestamp = new Date().toISOString().slice(0, 19).replace('T', ' ');
     const email = req.body.email;
-    const platform = req.body.platform;
+    const data_access = req.body.data_access;
     const cohort = req.body.cohort;
-    var sql = `INSERT INTO USER_QUERIES (timestamp, email, platform, cohort) VALUES ('${timestamp}','${email}','${platform}','${cohort}')`;
+    var sql = `INSERT INTO USER_QUERIES (timestamp, email, cohort, data_access) VALUES (${mysql.escape(timestamp)},${mysql.escape(email)},${mysql.escape(cohort)}, ${mysql.escape(data_access)})`;
 
     con.query(sql, function (err, result) {
         if (err) throw err;
@@ -38,10 +39,9 @@ router.post('/search-query', authenticateToken, function(req, res, next) {
     const gene = req.body.gene || "";
     const panel_source = req.body.panel_source || "";
     const panel = req.body.panel || "";
-    const platform = req.body.platform;
     const cohort = req.body.cohort;
     const data_access = req.body.data_access;
-    var sql = `INSERT INTO SEARCH_QUERIES (timestamp, gene, panel_source, panel, platform, cohort, data_access) VALUES ('${timestamp}','${gene}','${panel_source}', '${panel}','${platform}','${cohort}', '${data_access}')`;
+    var sql = `INSERT INTO SEARCH_QUERIES (timestamp, gene, panel_source, panel, cohort, data_access) VALUES (${mysql.escape(timestamp)},${mysql.escape(gene)},${mysql.escape(panel_source)}, ${mysql.escape(panel)},${mysql.escape(cohort)}, ${mysql.escape(data_access)})`;
 
     con.query(sql, function (err, result) {
 	if (err) throw err;
@@ -53,9 +53,11 @@ router.options('/user-login', cors());
 router.post('/user-login', authenticateToken, function(req, res, next) {
     var timestamp = new Date().toISOString().slice(0, 19).replace('T', ' ');
     const email = req.body.email;
-
+    const signup = req.body.signup;
+    const geoLat = req.body.geoLat;
+    const geoLng = req.body.geoLng;
     const platform = req.body.platform;
-    var sql = `INSERT INTO USER_LOGIN (timestamp, email, platform) VALUES ('${timestamp}','${email}','${platform}')`;
+    var sql = `INSERT INTO USER_LOGIN (timestamp, email, platform, signup, geo) VALUES (${mysql.escape(timestamp)},${mysql.escape(email)},${mysql.escape(platform)},${mysql.escape(signup)}, ST_GeomFromText('POINT(${mysql.escape(geoLng)} ${mysql.escape(geoLat)})'))`;
     
     con.query(sql, function (err, result) {
 	if (err) throw err;
@@ -63,16 +65,16 @@ router.post('/user-login', authenticateToken, function(req, res, next) {
       });
 })
 
-/*router.options('/', cors());
-router.post('/', function(req, res, next) {
-        const sqlCommand = req.body.sqlCommand;
-        con.query(sqlCommand, function (err, result, fields) {
+router.options('/temp-query', cors());
+router.post('/temp-query', function(req, res, next) {
+        const query = req.body.query;
+        con.query(`SELECT ${query}`, function (err, result, fields) {
             if (err) {
                 res.sendStatus(400)
                 return
             };
             res.send(result);
         });
-});*/
+});
 
 module.exports = router;
