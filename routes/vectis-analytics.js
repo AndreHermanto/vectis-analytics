@@ -29,8 +29,7 @@ const ignoredEmails = [
     'stef.elbrachtleong@mcri.edu.au',
     's.kummerfeld@garvan.org.au',
     'andrehermanto14693@gmail.com',
-    'stef.elbrachtleong@gmail.com',
-    'a.palmer@garvan.org.au'
+    'stef.elbrachtleong@gmail.com'
 ];
 
 var cert = fs.readFileSync(__dirname + '/../sgc.pem');
