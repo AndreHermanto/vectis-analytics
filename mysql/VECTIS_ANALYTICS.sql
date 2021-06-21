@@ -6,7 +6,8 @@ CREATE TABLE USER_QUERIES (
 	timestamp DATETIME, 
     email VARCHAR(255), 
     cohort VARCHAR(255),
-	data_access varchar(255)
+	data_access varchar(255),
+	platform varchar(255)
 );
 
 CREATE TABLE SEARCH_QUERIES (
@@ -15,7 +16,8 @@ CREATE TABLE SEARCH_QUERIES (
 	panel_source varchar(255),
 	panel varchar(255),
 	cohort varchar(255) NOT NULL,
-	data_access varchar(255) NOT NULL
+	data_access varchar(255) NOT NULL,
+	platform varchar(255)
 );
 
 CREATE TABLE USER_LOGIN (
