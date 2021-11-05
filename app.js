@@ -7,6 +7,7 @@ var http = require('http');
 
 var indexRouter = require('./routes/index');
 var vectisRouter = require('./routes/vectis-analytics');
+var auth0Router = require('./routes/auth0');
 
 var cors = require('cors')
 var whitelist = ['http://localhost:4200',
@@ -46,6 +47,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
 app.use('/analytics', vectisRouter);
+app.use('/auth0', auth0Router);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
